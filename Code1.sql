@@ -209,16 +209,16 @@ INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) 
 INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) VALUES (48, 10, 3, TO_DATE('2025-10-12', 'YYYY-MM-DD'), 0.67);
 --APPUSER
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (1, 'Mohammed', 'Smith', 'MO', '+34 637-1231236');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (102, 'Jimmy', 'Page',NULL, '+34 644-0046462');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (103, 'Mel', 'Gibson',NULL, '+34 666-5552555');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (104, 'Diana', 'Prince', 'Wonder Woman', '+1 (222) 555-1004');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (105, 'Clark', 'Kent', 'Superman', '619-1005');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (106, 'Peter', 'Parker', 'Spider-Man', '+1 (407) 224-1783');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (107, 'Majid', 'Ben Ghet',Null, '+218 091-3496121');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (108, 'Derek', 'Trotter', 'Del', '+44 016-1008');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (109, 'Harry', 'Potter',Null, '+44 619-1009100');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (110, 'Rodrigo', 'Campos', 'Milton', '+34 631-1010201');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (111, 'Ana', 'García',Null, '+34 644-1011121');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (2, 'Jimmy', 'Page',NULL, '+34 644-0046462');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (3, 'Mel', 'Gibson',NULL, '+34 666-5552555');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (4, 'Diana', 'Prince', 'Wonder Woman', '+1 (222) 555-1004');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (5, 'Clark', 'Kent', 'Superman', '619-1005');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (6, 'Peter', 'Parker', 'Spider-Man', '+1 (407) 224-1783');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (7, 'Majid', 'Ben Ghet',Null, '+218 091-3496121');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (8, 'Derek', 'Trotter', 'Del', '+44 016-1008');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (9, 'Harry', 'Potter',Null, '+44 619-1009100');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (10, 'Rodrigo', 'Campos', 'Milton', '+34 631-1010201');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (11, 'Ana', 'García',Null, '+34 644-1011121');
 ---APPGROUP
 INSERT INTO AppGroup (AppGroupId, GroupName, CreationDate, GroupDescription, BaseCurrencyId) VALUES (201, 'Family', TO_DATE('2023-01-15', 'YYYY-MM-DD'), 'Family expenses', 1);
 INSERT INTO AppGroup (AppGroupId, GroupName, CreationDate, GroupDescription, BaseCurrencyId) VALUES (202, 'Friends', TO_DATE('2023-02-20', 'YYYY-MM-DD'), 'Friends trips and outings', 1);
