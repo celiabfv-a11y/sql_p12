@@ -208,7 +208,7 @@ INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) 
 INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) VALUES (47, 3, 10, TO_DATE('2025-10-12', 'YYYY-MM-DD'), 1.50);
 INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) VALUES (48, 10, 3, TO_DATE('2025-10-12', 'YYYY-MM-DD'), 0.67);
 --APPUSER
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (101, 'Mohammed', 'Smith', 'MO', '+34 637-1231236');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (1, 'Mohammed', 'Smith', 'MO', '+34 637-1231236');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (102, 'Jimmy', 'Page',NULL, '+34 644-0046462');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (103, 'Mel', 'Gibson',NULL, '+34 666-5552555');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (104, 'Diana', 'Prince', 'Wonder Woman', '+1 (222) 555-1004');
