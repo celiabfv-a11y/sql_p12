@@ -384,3 +384,17 @@ INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText
 INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (911, 11, 1, 'Can you help me with this?', SYSTIMESTAMP);
 INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (912, 1, 11, 'Sure, what do you need?', SYSTIMESTAMP);
 
+--Queries
+--2. Obtain the average amount of the expenses for the months of June, July, and August of the year 2025. 
+SELECT AVG(Expense.Amount), Expense.ExpenseDate
+FROM Expense
+WHERE ExpenseDate >= TODATE(2025-06-01) AND ExpenseDate <= TODATE(2025-08-30)
+GROUP BY AppGroup.AppGroupId, Category.CategoryId
+
+--4. In progress
+SELECT AppGroup.GroupName, AppUser.FirstName, AppUser.LastName
+FROM AppGroup, AppUser
+WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
+	(SELECT Payment.AppGroupId, Payment.PayerId, Payment.PayeeId
+	FROM Payment
+	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment))
