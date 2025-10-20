@@ -347,16 +347,16 @@ INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId
 INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (610, 7, 5, 110, 320.00, 404, TO_DATE('2024-07-22','YYYY-MM-DD'), 'Travel refund');
 
 --NOTIFICATION
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (701, 401, 2, '80.25 JPY from Lucas Ramírez', SYSTIMESTAMP, 'N');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (702, 402, 1, '430.00 JPY from Javier López', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (703, 403, 2, '165.50 JPY from Valentina Santos', SYSTIMESTAMP, 'N');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (704, 404, 1, '215.00 JPY from Miguel Torres', SYSTIMESTAMP, 'N');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (705, 405, 1, '430.00 LYD from Omar Hernández', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (706, 406, 7, '320.00 INR from Sergio Cruz', SYSTIMESTAMP, 'N');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (707, 407, 8, '130.00 AUD from Sergio Cruz', SYSTIMESTAMP, 'N');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (708, 408, 9, '970.00 JPY from Isabella Martínez', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (709, 409, 9, '215.00 JPY from Diego Vargas', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (710, 410, 5, '320.00 CAD from Omar Hernández', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (701, 601, 2, '80.25 JPY from Lucas Ramírez', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (702, 602, 1, '430.00 JPY from Javier López', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (703, 603, 2, '165.50 JPY from Valentina Santos', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (704, 604, 1, '215.00 JPY from Miguel Torres', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (705, 605, 1, '430.00 LYD from Omar Hernández', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (706, 606, 7, '320.00 INR from Sergio Cruz', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (707, 607, 8, '130.00 AUD from Sergio Cruz', SYSTIMESTAMP, 'N');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (708, 608, 9, '970.00 JPY from Isabella Martínez', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (709, 609, 9, '215.00 JPY from Diego Vargas', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (710, 610, 5, '320.00 CAD from Omar Hernández', SYSTIMESTAMP, 'N');
 
 --MESSAGEGROUP
 INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (801, 101, 1, 'Hello everyone, new group created!', SYSTIMESTAMP);
