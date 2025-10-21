@@ -386,10 +386,10 @@ INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText
 
 --Queries
 --2. Obtain the average amount of the expenses for the months of June, July, and August of the year 2025. 
-SELECT AVG(Expense.Amount), Expense.ExpenseDate,Expense.AppGroupId,Expense.CategoryId
-FROM Expense
-WHERE ExpenseDate >= TODATE(2025-06-01) AND ExpenseDate <= TODATE(2025-08-30)
-GROUP BY AppGroup.AppGroupId, Category.CategoryId
+SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT,Expense.AppGroupId,Expense.CategoryId
+FROM Expense 
+WHERE Expense.ExpenseDate >= TO_DATE('2025-06-01','YYYY-MM-DD') AND Expense.ExpenseDate <= TO_DATE('2025-08-30','YYYY-MM-DD')
+GROUP BY Expense.AppGroupId, Expense.CategoryId
 
 --4. In progress
 SELECT AppGroup.GroupName, AppUser.FirstName, AppUser.LastName
