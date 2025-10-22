@@ -408,12 +408,6 @@ WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
 	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment))
 
 
---5.
-SELECT AppUser.FirstName,AppUser.LastName,MIN(Expense.amount),MAX(Expense.amount),AppGroup.GroupName
-FROM Expense
-JOIN AppUser ON AppUser.AppUserId=Expense.PayerId
-JOIN AppGroup ON AppGroup.AppGroupId=Expense.AppGroupId
-JOIN Category ON Expense.CategoryId=Category.CategoryId
 
 
 --6.In progress it has mistakes
