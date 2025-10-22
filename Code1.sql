@@ -407,6 +407,17 @@ WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
 	FROM Payment
 	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment))
 
+--5.Tenemos en duda la parte de agrupar por group name, asi que lo dejamos a medias.
+SELECT AppUser.FirstName,AppUser.LastName,AppGroup.GroupName,MIN(Expense.amount),MAX(Expense.amount)
+FROM Expense
+JOIN AppUser ON AppUser.AppUserId=Expense.PayerId
+JOIN AppGroup ON AppGroup.AppGroupId=Expense.AppGroupId
+JOIN Category ON Category.CategoryId=Expense.CategoryId
+WHERE Category.name='INVOICES'
+GROUP BY 
+	AppUser.AppUserId,AppUser.FirstName,AppUser.LastName,A
+
+
 
 
 
