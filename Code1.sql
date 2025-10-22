@@ -385,6 +385,14 @@ INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText
 INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (912, 1, 11, 'Sure, what do you need?', SYSTIMESTAMP);
 
 --Queries
+--1.
+SELECT AppUser.FirstName,AppUser.LastName,AppGroup.GroupName,AVG(Payment.amount)
+FROM Payment
+JOIN AppUser ON AppUser.AppUserId=Payment.PayerId
+JOIN AppGroup ON Payment.AppGroupId=AppGroup.AppGroupId
+GROUP BY AppUser.AppUserId,AppGroup.AppGroupId
+ORDER BY AppUser.FirstName ASC,AppUser.LastName ASC,AppGroup.GroupName ASC
+
 --2. Obtain the average amount of the expenses for the months of June, July, and August of the year 2025. 
 SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT,Expense.AppGroupId,Expense.CategoryId
 FROM Expense 
@@ -398,3 +406,31 @@ WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
 	(SELECT Payment.AppGroupId, Payment.PayerId, Payment.PayeeId
 	FROM Payment
 	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment))
+
+
+--5.
+SELECT AppUser.FirstName,AppUser.LastName,MIN(Expense.amount),MAX(Expense.amount),AppGroup.GroupName
+FROM Expense
+JOIN AppUser ON AppUser.AppUserId=Expense.PayerId
+JOIN AppGroup ON AppGroup.AppGroupId=Expense.AppGroupId
+JOIN Category ON Expense.CategoryId=Category.CategoryId
+
+
+--6.In progress it has mistakes
+SELECT AppUser.FirstName,AppUser.LastName,AppGroup.GroupName,COUNT(*)AS Notifications_unread
+FROM MEMBERSHIP
+JOIN AppUser ON AppUser.AppUserId=Membership.AppUserId
+JOIN AppGroup ON AppGroup.AppGroupId=Membership.AppGroupId
+JOIN Notification ON Notification.RecipientId=AppUser.AppUserId
+WHERE Notification.IsRead='N' 
+	AND Membership.LeavingDate IS NULL 
+	AND Membership.MemberRole IN ('Owner','Admin')
+GROUP BY 
+	AppUser.AppUserId,AppUser.FirstName,AppUser.LastName,AppGroup.AppGroupId,
+	AppGroup.GroupName
+
+
+
+
+
+
