@@ -272,7 +272,7 @@ INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (210, 104, '
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (211, 104, 'Meals');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (212, 105, 'Flights');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (213, 105, 'Lodging');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (214, 105, 'Food & Drinks');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (214, 105, 'Food');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (215,106, 'Dining Out');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (216,106, 'Fun');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (217,107, 'Rent Payment');			
