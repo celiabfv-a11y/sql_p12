@@ -247,7 +247,7 @@ INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingD
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (8, 105, TO_DATE('2025-08-15','YYYY-MM-DD'), 'Member', TO_DATE('2025-08-22','YYYY-MM-DD')); -- Left
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (8, 106, TO_DATE('2022-11-05','YYYY-MM-DD'), 'Owner', NULL);
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (9, 107, TO_DATE('2025-04-20','YYYY-MM-DD'), 'Owner', NULL);
-INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (10,108, TO_DATE('2025-05-25','YYYY-MM-DD'), 'Owner', NULL); 
+INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (10, 108, TO_DATE('2025-05-25','YYYY-MM-DD'), 'Owner', NULL); 
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (9, 108, TO_DATE('2025-05-26','YYYY-MM-DD'), 'Admin', TO_DATE('2025-05-30','YYYY-MM-DD')); -- Left
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (11, 109, TO_DATE('2025-07-02','YYYY-MM-DD'), 'Member', NULL);
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (5, 110, TO_DATE('2025-07-16','YYYY-MM-DD'), 'Member', TO_DATE('2025-08-01','YYYY-MM-DD')); 
