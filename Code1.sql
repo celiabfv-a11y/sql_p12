@@ -212,14 +212,14 @@ INSERT INTO ExchangeRate (RateId, CurrencyFrom, CurrencyTo, ExchangeDate, Rate) 
 
 --- AppUser
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (1, 'Lucas', 'Ramírez', 'Luki', '+34 600-1112233');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (2, 'María', 'Fernández', NULL, '+34 611-2233445');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (2, 'María', 'Gil', NULL, '+34 611-2233445');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (3, 'Javier', 'López', NULL, '+34 622-3344556');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (4, 'Valentina', 'Santos', 'Vally', '+1 (333) 444-5566');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (5, 'Miguel', 'Torres', 'Miggy', '+1 (444) 555-6677');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (6, 'Elena', 'Morales', 'Eli', '+1 (555) 666-7788');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (7, 'Omar', 'Hernández', NULL, '+218 092-1234567');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (8, 'Sergio', 'Cruz', 'SC', '+44 017-2020304');
-INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (9, 'Isabella', 'Martínez', NULL, '+44 620-1011122');
+INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (9, 'Isabel', 'Martín', NULL, '+44 620-1011122');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (10, 'Diego', 'Vargas', 'D-V', '+34 632-2021223');
 INSERT INTO AppUser (AppUserId, FirstName, LastName, "Alias", Phone) VALUES (11, 'Laura', 'Ríos', NULL, '+34 645-3031324');
 
@@ -285,10 +285,10 @@ INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, Expen
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (302, 2, 101, 80.25, 401, TO_DATE('2023-01-23','YYYY-MM-DD'), TO_DATE('2023-01-23','YYYY-MM-DD'), 'Shared', 202); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (303, 3, 101, 1250.00, 401, TO_DATE('2023-02-05','YYYY-MM-DD'), TO_DATE('2023-02-05','YYYY-MM-DD'), 'Exact', 203); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (304, 4, 102, 320.00, 401, TO_DATE('2023-02-24','YYYY-MM-DD'), TO_DATE('2023-02-24','YYYY-MM-DD'), 'Equal', 204); 
-INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (305, 5, 103, 215.00, 401, TO_DATE('2023-03-16','YYYY-MM-DD'), TO_DATE('2023-03-16','YYYY-MM-DD'), 'Shared', 207); 
+INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (305, 2, 102, 215.00, 401, TO_DATE('2023-03-16','YYYY-MM-DD'), TO_DATE('2023-03-16','YYYY-MM-DD'), 'Shared', 207); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (306, 1, 104, 820.00, 406, TO_DATE('2025-06-10','YYYY-MM-DD'), TO_DATE('2025-06-10','YYYY-MM-DD'), 'Equal', 209); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (307, 7, 105, 615.00, 403, TO_DATE('2025-08-18','YYYY-MM-DD'), TO_DATE('2025-08-18','YYYY-MM-DD'), 'Shared', 212); 
-INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (308, 8, 106, 130.00, 402, TO_DATE('2022-11-05','YYYY-MM-DD'), TO_DATE('2022-11-05','YYYY-MM-DD'), 'Equal', 215); 
+INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (308, 4, 101, 130.00, 402, TO_DATE('2022-11-05','YYYY-MM-DD'), TO_DATE('2022-11-05','YYYY-MM-DD'), 'Equal', 215); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (309, 9, 107, 970.00, 401, TO_DATE('2023-04-22','YYYY-MM-DD'), TO_DATE('2023-04-22','YYYY-MM-DD'), 'Exact', 217); 
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (310, 10, 108, 430.00, 401, TO_DATE('2023-05-26','YYYY-MM-DD'), TO_DATE('2023-05-26','YYYY-MM-DD'), 'Shared', 219);
 
@@ -313,8 +313,11 @@ INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALU
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (304, 2, 102, 80.00);
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (304, 3, 102, 80.00);
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (304, 4, 102, 80.00);
----- Expense 305 (215.00 JPY / Group 103) - Corrected to 200.00 for the only participant
-INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (305, 5, 103, 215.00);
+---- Expense 305 (215.00 JPY / Group 102)
+----- 45% of the total expense
+INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (305, 2, 102, 96.75);
+----- 55% of the total expense
+INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (305, 3, 102, 118.25);
 ---- Expense 306 (820.00 LYD / Group 104)
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (306, 1, 104, 410.00);
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (306, 6, 104, 410.00);
@@ -323,8 +326,10 @@ INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALU
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (307, 7, 105, 461.25);
 ----- 25% of the total expense
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (307, 8, 105, 153.25);
----- Expense 308 (130.00 AUD / Group 106) -
-INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (308, 8, 106, 130.00);
+---- Expense 308 (130.00 AUD / Group 106)
+INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (308, 1, 101, 43.33);
+INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (308, 2, 101, 43.33);
+INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (308, 4, 101, 43.33);
 ---- Expense 309 (970.00 JPY / Group 107) 
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (309, 9, 107, 970.00);
 ---- Expense 310 (430.00 JPY / Group 108)
@@ -334,96 +339,96 @@ INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALU
 INSERT INTO ParticipationExpense (ExpenseId, AppUserId, AppGroupId, Amount) VALUES (310, 10, 108, 172.00);
 
 --- Payment
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (601, 1, 2, 101, 82.25, 401, TO_DATE('2023-01-25','YYYY-MM-DD'), 'Split groceries');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (602, 3, 1, 101, 430.00, 401, TO_DATE('2023-02-08','YYYY-MM-DD'), 'Monthly rent');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (603, 4, 2, 102, 165.50, 401, TO_DATE('2023-02-27','YYYY-MM-DD'), 'Shared trip costs');
---INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (604, 5, 1, 103, 215.00, 401, TO_DATE('2023-03-18','YYYY-MM-DD'), 'Office supplies payback');
---INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (605, 7, 1, 104, 430.00, 406, TO_DATE('2025-06-12','YYYY-MM-DD'), 'Flight refund');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (606, 8, 7, 105, 320.00, 403, TO_DATE('2025-08-20','YYYY-MM-DD'), 'Hotel cost share');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (607, 8, 8, 106, 130.00, 402, TO_DATE('2022-11-07','YYYY-MM-DD'), 'Dinner split');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (608, 9, 9, 107, 970.00, 401, TO_DATE('2023-04-25','YYYY-MM-DD'), 'Monthly rent');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (609, 10, 9, 108, 215.00, 401, TO_DATE('2023-05-28','YYYY-MM-DD'), 'Ski trip refund');
-INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (610, 7, 5, 110, 320.00, 404, TO_DATE('2024-07-22','YYYY-MM-DD'), 'Travel refund');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (601, 2, 1, 101, 55.17, 401, TO_DATE('2023-01-25','YYYY-MM-DD'), 'Split groceries');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (602, 1, 2, 101, 40.13, 401, TO_DATE('2023-02-08','YYYY-MM-DD'), 'Monthly rent');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (603, 3, 2, 101, 13.37, 401, TO_DATE('2023-02-27','YYYY-MM-DD'), 'Shared trip costs');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (604, 3, 4, 102, 80.00, 401, TO_DATE('2023-03-18','YYYY-MM-DD'), 'Office supplies');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (605, 3, 2, 102, 118.25, 401, TO_DATE('2025-06-12','YYYY-MM-DD'), 'Flight refund');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (606, 6, 1, 104, 410.00, 406, TO_DATE('2025-08-20','YYYY-MM-DD'), 'Hotel cost share');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (607, 8, 7, 105, 153.25, 403, TO_DATE('2022-11-07','YYYY-MM-DD'), 'Dinner split');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (608, 1, 4, 101, 43.33, 402, TO_DATE('2023-04-25','YYYY-MM-DD'), 'Monthly rent');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (609, 2, 4, 101, 43.33, 402, TO_DATE('2023-05-28','YYYY-MM-DD'), 'Ski trip refund');
+INSERT INTO Payment (PaymentId, PayerId, PayeeId, AppGroupId, Amount, CurrencyId, PaymentDate, Note) VALUES (610, 9, 10, 108, 258.00, 401, TO_DATE('2024-07-22','YYYY-MM-DD'), 'Travel refund');
 
 --- Notification
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (701, 601, 2, '80.25 JPY from Lucas Ramírez', SYSTIMESTAMP, 'N');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (702, 602, 1, '430.00 JPY from Javier López', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (703, 603, 2, '165.50 JPY from Valentina Santos', SYSTIMESTAMP, 'N');
---INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (704, 604, 1, '215.00 JPY from Miguel Torres', SYSTIMESTAMP, 'N');
---INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (705, 605, 1, '430.00 LYD from Omar Hernández', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (706, 606, 7, '320.00 INR from Sergio Cruz', SYSTIMESTAMP, 'N');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (707, 607, 8, '130.00 AUD from Sergio Cruz', SYSTIMESTAMP, 'N');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (708, 608, 9, '970.00 JPY from Isabella Martínez', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (709, 609, 9, '215.00 JPY from Diego Vargas', SYSTIMESTAMP, 'Y');
-INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (710, 610, 5, '320.00 CAD from Omar Hernández', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (701, 601, 1, '55.17 JPY from María Gil', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (702, 602, 2, '40.13 JPY from Lucas Ramírez', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (703, 603, 2, '13.37 JPY from Javier López', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (704, 604, 4, '80.00 JPY from Javier López', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (705, 605, 2, '118.25 JPY from Javier López', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (706, 606, 1, '410.00 LYD from Elena Morales', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (707, 607, 7, '153.25 INR from Sergio Cruz', SYSTIMESTAMP, 'N');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (708, 608, 4, '43.33 AUD from ILucas Ramírez', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (709, 609, 4, '43.33 AUD from María Gil', SYSTIMESTAMP, 'Y');
+INSERT INTO Notification1 (NotificationId, PaymentId, RecipientId, NotificationText, NotificationTime, IsRead) VALUES (710, 610, 10, '258.00 JPY from Isabel Martín', SYSTIMESTAMP, 'N');
 
 --- MessageGroup
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (801, 101, 1, 'Hello, new group created!', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (802, 102, 4, 'Pack, the trip is near!', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (803, 103, 5, 'Reminder: meeting at 10 AM', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (804, 104, 1, 'Japan trip is ready!', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (805, 105, 7, 'Can’t wait for the adventure!', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (806, 106, 8, 'Friday night plans, anyone?', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (807, 107, 9, 'Rent is due, don’t forget!', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (808, 108, 10, 'Ski weekend confirmed! ⛷️', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (809, 109, 11, 'Gym session tomorrow morning?', SYSTIMESTAMP);
-INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime)VALUES (810, 110, 7, 'Summer trip planning starts!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (801, 101, 1, 'New group created!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (802, 102, 4, 'The trip is near!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (803, 103, 5, 'Meeting at 10 AM', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (804, 104, 1, 'Japan trip ready!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (805, 105, 7, 'Ready for the adventure!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (806, 106, 8, 'Friday night plans?', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (807, 107, 9, 'Rent is due', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (808, 108, 10, 'Ski weekend confirmed!', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (809, 109, 11, 'Gym tomorrow morning?', SYSTIMESTAMP);
+INSERT INTO MessageGroup (MessageGroupId, AppGroupId, SenderId, MessageText, MessageTime) VALUES (810, 110, 7, 'Trip planning starts!', SYSTIMESTAMP);
 
 --- MessagePrivate
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (901, 1, 2, 'Hey Maria, how are you?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (902, 2, 1, 'Thanks a lot!', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (903, 3, 4, 'Are you ready for the trip?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (904, 4, 3, 'Can’t wait to start!', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (905, 5, 6, 'Have you made the payment?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (906, 6, 5, 'Almost done with it.', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (907, 7, 8, 'Will you join the Japan trip?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (908, 8, 7, 'Looking forward to it!', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (909, 9, 10, 'Did you book everything?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (910, 10, 9, 'Yes, all set.', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (911, 11, 1, 'Can you help me with this?', SYSTIMESTAMP);
-INSERT INTO MessagePrivate (MessagePrivateId, SenderId, RecipientId, MessageText, MessageTime) VALUES (912, 1, 11, 'Sure, what do you need?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (901, 101, 1, 2, 'Hey Maria, how are you?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (902, 101, 2, 1, 'Thanks a lot!', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (903, 101, 3, 4, 'Are you ready for the trip?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (904, 101, 4, 3, 'Can’t wait to start!', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (905, 104, 1, 6, 'Have you made the payment?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (906, 104, 6, 1, 'Almost done with it.', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (907, 105, 7, 8, 'Will you join the Japan trip?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (908, 105, 8, 7, 'Looking forward to it!', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (909, 108, 9, 10, 'Did you book everything?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (910, 108, 10, 9, 'Yes, all set.', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (911, 110, 5, 7, 'Can you help me with this?', SYSTIMESTAMP);
+INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId, MessageText, MessageTime) VALUES (912, 110, 7, 5, 'Sure, what do you need?', SYSTIMESTAMP);
 
 
 -- QUERIES
 --- 1. Average amount spent by each user in each group. 
-SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, AVG(Payment.amount)
-FROM Payment
-JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
-JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
-GROUP BY AppUser.AppUserId, AppGroup.AppGroupId
-ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
+SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, AVG(Payment.amount) 
+	FROM Payment
+	JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
+	JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
+	GROUP BY AppUser.AppUserId, AppGroup.AppGroupId
+	ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
 
 --- 2. Average amount of the expenses for the months of June, July, and August of the year 2025 for each group and category.
 SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT, Expense.AppGroupId, Expense.CategoryId
-FROM Expense 
-WHERE Expense.ExpenseDate >= TO_DATE('2025-06-01','YYYY-MM-DD') AND Expense.ExpenseDate <= TO_DATE('2025-08-30','YYYY-MM-DD')
-GROUP BY Expense.AppGroupId, Expense.CategoryId;
+	FROM Expense 
+	WHERE Expense.ExpenseDate >= TO_DATE('2025-06-01','YYYY-MM-DD') AND Expense.ExpenseDate <= TO_DATE('2025-08-30','YYYY-MM-DD')
+	GROUP BY Expense.AppGroupId, Expense.CategoryId;
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
 ----Check
 SELECT AppUser.FirstName, AppUser.LastName, 
-		(SELECT COUNT(*) 
-		 FROM MessageGroup 
-		 WHERE MessageGroup.SenderId = AppUser.AppUserId) AS TotalGroupMessages,
-		(SELECT COUNT(*) 
-        -- MessagePrivate.senderID = AppUser.AppUserId
-		 FROM MessagePrivate 
-		 WHERE MessagePrivate.SenderId = AppUser.AppUserId) AS TotalPrivateMessages,
-		((SELECT COUNT(*) 
-		 FROM MessageGroup 
-		 WHERE MessageGroup.SenderId = AppUser.AppUserId) +
-		 (SELECT COUNT(*) 
-		 FROM MessagePrivate 
-		 WHERE MessagePrivate.SenderId = AppUser.AppUserId)) AS OverallTotalMessages
-		from AppUser
-		WHERE OverallTotalMessages > 0
-		 Order By OverallTotalMessages DESC;
+	(SELECT COUNT(*) 
+	FROM MessageGroup 
+	WHERE MessageGroup.SenderId = AppUser.AppUserId) AS TotalGroupMessages,
+	(SELECT COUNT(*) 
+	-- MessagePrivate.senderID = AppUser.AppUserId
+	FROM MessagePrivate 
+	WHERE MessagePrivate.SenderId = AppUser.AppUserId) AS TotalPrivateMessages,
+	((SELECT COUNT(*) 
+	FROM MessageGroup 
+	WHERE MessageGroup.SenderId = AppUser.AppUserId) +
+	(SELECT COUNT(*) 
+	FROM MessagePrivate 
+	WHERE MessagePrivate.SenderId = AppUser.AppUserId)) AS OverallTotalMessages
+	FROM AppUser
+	WHERE OverallTotalMessages > 0
+	Order By OverallTotalMessages DESC;
 
 --- 4. Details of all payment settlements whose amount is greater than the average payment amount within the same group. 
 ---- In progress
 SELECT AppGroup.GroupName, AppUser.FirstName, AppUser.LastName
-FROM AppGroup, AppUser
-WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
+	FROM AppGroup, AppUser
+	WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
 	(SELECT Payment.AppGroupId, Payment.PayerId, Payment.PayeeId
 	FROM Payment
 	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment));
@@ -431,27 +436,24 @@ WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
 --- 5. Minimum expense and maximum expense made by each user in groups belonging to the 'Invoices' category.
 ---- Tenemos en duda la parte de agrupar por group name, asi que lo dejamos a medias.
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, MIN(Expense.amount), MAX(Expense.amount)
-FROM Expense
-JOIN AppUser ON AppUser.AppUserId = Expense.PayerId
-JOIN AppGroup ON AppGroup.AppGroupId = Expense.AppGroupId
-JOIN Category ON Category.CategoryId = Expense.CategoryId
-WHERE Category.name = 'INVOICES'
-GROUP BY 
-	AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, A;
+	FROM Expense
+	JOIN AppUser ON AppUser.AppUserId = Expense.PayerId
+	JOIN AppGroup ON AppGroup.AppGroupId = Expense.AppGroupId
+	JOIN Category ON Category.CategoryId = Expense.CategoryId
+	WHERE Category.name = 'INVOICES'
+	GROUP BY AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, A;
 
 --- 6. Full name, group name, and total number of unread notifications of each user who is an active member of a group.
 ---- In progress it has mistakes
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notifications_unread
-FROM MEMBERSHIP
-JOIN AppUser ON AppUser.AppUserId = Membership.AppUserId
-JOIN AppGroup ON AppGroup.AppGroupId = Membership.AppGroupId
-JOIN Notification ON Notification.RecipientId = AppUser.AppUserId
-WHERE Notification.IsRead = 'N' 
+	FROM MEMBERSHIP
+	JOIN AppUser ON AppUser.AppUserId = Membership.AppUserId
+	JOIN AppGroup ON AppGroup.AppGroupId = Membership.AppGroupId
+	JOIN Notification ON Notification.RecipientId = AppUser.AppUserId
+	WHERE Notification.IsRead = 'N' 
 	AND Membership.LeavingDate IS NULL 
 	AND Membership.MemberRole IN ('Owner','Admin')
-GROUP BY 
-	AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, AppGroup.AppGroupId,
-	AppGroup.GroupName;
+	GROUP BY AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, AppGroup.AppGroupId, AppGroup.GroupName;
 
 
 -- TRIGGERS
@@ -459,16 +461,16 @@ GROUP BY
 
 --- 2. In a payment, payer and payee must be active members of the same group.
 CREATE TRIGGER MembershipCheck
-BEFORE INSERT ON Payment
-FOR EACH ROW
-BEGIN
+	BEFORE INSERT ON Payment
+	FOR EACH ROW
+	BEGIN
 	IF NOT EXISTS (
 	SELECT 1
 	FROM Membership m1
 	JOIN Membership m2 ON m2.AppGroupId = m1.AppGroupId AND m1.AppUserId = :NEW.PayerId AND m2.AppUserId = :NEW.PayeeId
 	HAVING m1.AppGroupId = m2.AppGroupId
 	) THEN
-		raise_application_error(-20001, 'Payer and payee do not belong to the same group.')
+	raise_application_error(-20001, 'Payer and payee do not belong to the same group.')
 	END IF;
 END;
 
@@ -476,11 +478,11 @@ END;
 
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
 CREATE TRIGGER ExchangeRateExists
-BEFORE INSERT ON Payment
-FOR EACH ROW
-BEGIN
+	BEFORE INSERT ON Payment
+	FOR EACH ROW
+	BEGIN
 	IF NOT (:NEW.Currency = (SELECT AG.BaseCurrencyId FROM AppGroup AG) OR (:NEW.PaymentDate = (SELECT ER.ExchangeDate FROM ExchangeRate ER)) AND 
-		(SELECT ER.CurrencyFrom FROM ExchangeRate ER JOIN AppGroup AG ON AG.BaseCurrencyId = ER.CurrencyTo WHERE ER.CurrencyFrom = :NEW.Currency)) THEN
-		raise_application_error(-20001, 'There is no exchange rate for that currency.');
+	(SELECT ER.CurrencyFrom FROM ExchangeRate ER JOIN AppGroup AG ON AG.BaseCurrencyId = ER.CurrencyTo WHERE ER.CurrencyFrom = :NEW.Currency)) THEN
+	raise_application_error(-20001, 'There is no exchange rate for that currency.');
 	END IF;
 END;
