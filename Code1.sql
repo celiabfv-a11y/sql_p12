@@ -259,26 +259,26 @@ INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingD
 INSERT INTO Membership (AppUserId, AppGroupId, JoiningDate, MemberRole, LeavingDate) VALUES (6, 102, TO_DATE('2025-03-16','YYYY-MM-DD'), 'Member', NULL);
 
 --- Category
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (201, 101, 'Supermarket');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (202, 101, 'Bills');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (203, 101, 'Housing');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (204, 102, 'Trips');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (205, 102, 'Restaurants');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (201, 101, 'Food');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (202, 101, 'Invoices');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (203, 101, 'Invoices');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (204, 102, 'Leisure');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (205, 102, 'Food');
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (206, 102, 'Leisure');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (207, 103, 'Office Items');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (208, 103, 'Client Meals');
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (209, 104, 'Air Tickets');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (210, 104, 'Hotel');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (211, 104, 'Meals');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (212, 105, 'Flights');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (213, 105, 'Lodging');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (207, 103, 'Invoices');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (208, 103, 'Food');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (209, 104, 'Leisure');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (210, 104, 'Leisure');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (211, 104, 'Food');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (212, 105, 'Invoices');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (213, 105, 'Leisure');			
 INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (214, 105, 'Food');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (215,106, 'Dining Out');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (216,106, 'Fun');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (217,107, 'Rent Payment');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (218,107, 'Utilities Bills');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (219,108, 'Ski Tickets');			
-INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (220,108, 'Hotel Stay');
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (215,106, 'Food');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (216,106, 'Leisure');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (217,107, 'Invoices');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (218,107, 'Invoices');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (219,108, 'Leisure');			
+INSERT INTO Category1 (CategoryId, AppGroupId, CategoryName) VALUES (220,108, 'Leisure');
 
 --- Expense
 INSERT INTO Expense (ExpenseId, AppUserId, AppGroupId, Amount, CurrencyId, ExpenseDate, RegistrationDate, DivisionType, CategoryId) VALUES (301, 1, 101, 165.50, 401, TO_DATE('2023-01-18','YYYY-MM-DD'), TO_DATE('2023-01-18','YYYY-MM-DD'), 'Equal', 201); 
@@ -405,7 +405,6 @@ SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT, Expense.AppGroupId, Expense.Catego
 	GROUP BY Expense.AppGroupId, Expense.CategoryId;
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
-----Check
 SELECT *
 FROM (
     SELECT 
@@ -431,7 +430,6 @@ WHERE Results.OverallTotalMessages > 0
 ORDER BY Results.OverallTotalMessages DESC;
 
 --- 4. Details of all payment settlements whose amount is greater than the average payment amount within the same group. 
----- In progress
 SELECT 
     g.GroupName,
     p.PaymentDate,
@@ -456,25 +454,23 @@ ORDER BY
     g.GroupName ASC,
     p.Amount DESC;
 
-
 --- 5. Minimum expense and maximum expense made by each user in groups belonging to the 'Invoices' category.
----- Tenemos en duda la parte de agrupar por group name, asi que lo dejamos a medias.
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, MIN(Expense.amount), MAX(Expense.amount)
 	FROM Expense
-	JOIN AppUser ON AppUser.AppUserId = Expense.PayerId
+	JOIN AppUser ON AppUser.AppUserId = Expense.AppUserId
 	JOIN AppGroup ON AppGroup.AppGroupId = Expense.AppGroupId
-	JOIN Category ON Category.CategoryId = Expense.CategoryId
-	WHERE Category.name = 'INVOICES'
-	GROUP BY AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, A;
+	JOIN Category1 ON Category1.CategoryId = Expense.CategoryId
+	WHERE Category1.CategoryName = 'Invoices'
+	GROUP BY AppUser.FirstName, AppUser.LastName, AppGroup.GroupName
+	ORDER BY AppUser.FirstName, AppUser.LastName, AppGroup.GroupName;
 
 --- 6. Full name, group name, and total number of unread notifications of each user who is an active member of a group.
----- In progress it has mistakes
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notifications_unread
 	FROM MEMBERSHIP
 	JOIN AppUser ON AppUser.AppUserId = Membership.AppUserId
 	JOIN AppGroup ON AppGroup.AppGroupId = Membership.AppGroupId
-	JOIN Notification ON Notification.RecipientId = AppUser.AppUserId
-	WHERE Notification.IsRead = 'N' 
+	JOIN Notification1 ON Notification1.RecipientId = AppUser.AppUserId
+	WHERE Notification1.IsRead = 'N' 
 	AND Membership.LeavingDate IS NULL 
 	AND Membership.MemberRole IN ('Owner','Admin')
 	GROUP BY AppUser.AppUserId, AppUser.FirstName, AppUser.LastName, AppGroup.AppGroupId, AppGroup.GroupName;
@@ -499,6 +495,7 @@ CREATE TRIGGER MembershipCheck
 END;
 
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
+
 
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
 CREATE TRIGGER ExchangeRateExists
