@@ -391,12 +391,12 @@ INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId,
 
 -- QUERIES
 --- 1. Average amount spent by each user in each group. 
-SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, AVG(Payment.amount) 
-	FROM Payment
-	JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
-	JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
-	GROUP BY AppUser.AppUserId, AppGroup.AppGroupId
-	ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
+SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, AVG(Payment.amount)
+FROM Payment
+JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
+JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
+GROUP BY AppUser.AppUserId, AppGroup.AppGroupId,AppUser.FirstName,AppUser.LastName,AppGroup.GroupName
+ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
 
 --- 2. Average amount of the expenses for the months of June, July, and August of the year 2025 for each group and category.
 SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT, Expense.AppGroupId, Expense.CategoryId
@@ -406,32 +406,56 @@ SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT, Expense.AppGroupId, Expense.Catego
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
 ----Check
-SELECT AppUser.FirstName, AppUser.LastName, 
-	(SELECT COUNT(*) 
-	FROM MessageGroup 
-	WHERE MessageGroup.SenderId = AppUser.AppUserId) AS TotalGroupMessages,
-	(SELECT COUNT(*) 
-	-- MessagePrivate.senderID = AppUser.AppUserId
-	FROM MessagePrivate 
-	WHERE MessagePrivate.SenderId = AppUser.AppUserId) AS TotalPrivateMessages,
-	((SELECT COUNT(*) 
-	FROM MessageGroup 
-	WHERE MessageGroup.SenderId = AppUser.AppUserId) +
-	(SELECT COUNT(*) 
-	FROM MessagePrivate 
-	WHERE MessagePrivate.SenderId = AppUser.AppUserId)) AS OverallTotalMessages
-	FROM AppUser
-	WHERE OverallTotalMessages > 0
-	Order By OverallTotalMessages DESC;
+SELECT *
+FROM (
+    SELECT 
+        u.FirstName,
+        u.LastName,
+        (SELECT COUNT(*) 
+         FROM MessageGroup mg
+         WHERE mg.SenderId = u.AppUserId) AS TotalGroupMessages,
+        (SELECT COUNT(*) 
+         FROM MessagePrivate mp
+         WHERE mp.SenderId = u.AppUserId) AS TotalPrivateMessages,
+        (
+            (SELECT COUNT(*) 
+             FROM MessageGroup mg
+             WHERE mg.SenderId = u.AppUserId)
+          + (SELECT COUNT(*) 
+             FROM MessagePrivate mp
+             WHERE mp.SenderId = u.AppUserId)
+        ) AS OverallTotalMessages
+    FROM AppUser u
+) Results
+WHERE Results.OverallTotalMessages > 0
+ORDER BY Results.OverallTotalMessages DESC;
 
 --- 4. Details of all payment settlements whose amount is greater than the average payment amount within the same group. 
 ---- In progress
-SELECT AppGroup.GroupName, AppUser.FirstName, AppUser.LastName
-	FROM AppGroup, AppUser
-	WHERE AppGroup.AppGroupId, AppUser.AppUserId IN
-	(SELECT Payment.AppGroupId, Payment.PayerId, Payment.PayeeId
-	FROM Payment
-	WHERE Payment.Amount > (SELECT AVG(Payment.Amount) FROM Payment));
+SELECT 
+    g.GroupName,
+    p.PaymentDate,
+    p.Amount,
+    payer.FirstName  AS PayerFirstName,
+    payer.LastName   AS PayerLastName,
+    payee.FirstName  AS PayeeFirstName,
+    payee.LastName   AS PayeeLastName
+FROM Payment p
+JOIN AppGroup g 
+    ON p.AppGroupId = g.AppGroupId
+JOIN AppUser payer
+    ON payer.AppUserId = p.PayerId
+JOIN AppUser payee
+    ON payee.AppUserId = p.PayeeId
+WHERE p.Amount > (
+        SELECT AVG(pay.Amount)
+        FROM Payment pay
+        WHERE pay.AppGroupId = p.AppGroupId
+    )
+ORDER BY 
+    g.GroupName ASC,
+    p.Amount DESC;
+
 
 --- 5. Minimum expense and maximum expense made by each user in groups belonging to the 'Invoices' category.
 ---- Tenemos en duda la parte de agrupar por group name, asi que lo dejamos a medias.
