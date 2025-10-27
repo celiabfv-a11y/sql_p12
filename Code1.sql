@@ -399,21 +399,19 @@ GROUP BY AppUser.AppUserId, AppGroup.AppGroupId,AppUser.FirstName,AppUser.LastNa
 ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
 
 --- 2. Average amount of the expenses for the months of June, July, and August of the year 2025 for each group and category.
-Select AG.GroupName, C.CategoryName, 
-	   AVG(E.Amount * ER.Rate) AS AverageExpenseInBaseCurrency
-From Expense E
-Join AppGroup AG ON E.AppGroupId = AG.AppGroupId
-Join Category1 C ON E.CategoryId = C.CategoryId
-Join ExchangeRate ER ON E.CurrencyId = ER.CurrencyFrom 
+Select AG.GroupName, C.CategoryName, AVG(E.Amount * ER.Rate) AS AverageExpenseInBaseCurrency
+FROM Expense E
+JOIN AppGroup AG ON E.AppGroupId = AG.AppGroupId
+JOIN Category1 C ON E.CategoryId = C.CategoryId
+JOIN ExchangeRate ER ON E.CurrencyId = ER.CurrencyFrom 
 					 AND AG.BaseCurrencyId = ER.CurrencyTo
 					 AND ER.ExchangeDate = E.ExpenseDate 
-Where EXTRACT(MONTH FROM E.ExpenseDate) IN (6, 7, 8)
+WHERE EXTRACT(MONTH FROM E.ExpenseDate) IN (6, 7, 8)
   AND EXTRACT(YEAR FROM E.ExpenseDate) = 2025
-group by AG.GroupName, C.CategoryName;
+GROUP BY AG.GroupName, C.CategoryName;
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
-SELECT *
-FROM (
+SELECT * FROM (
     SELECT 
         u.FirstName,
         u.LastName,
@@ -495,10 +493,8 @@ DECLARE
     v_participations_owed NUMBER;
     v_payments_paid NUMBER;
 BEGIN
-    -- Only run this check if the user is being marked as having left
     IF :NEW.LeavingDate IS NOT NULL AND :OLD.LeavingDate IS NULL THEN
         
-        -- 1. Get all money the user is OWED
         SELECT COALESCE(SUM(Amount), 0) 
         INTO v_expenses_created 
         FROM Expense 
@@ -509,7 +505,6 @@ BEGIN
         FROM Payment 
         WHERE PayeeId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
 
-        -- 2. Get all money the user OWES
         SELECT COALESCE(SUM(Amount), 0) 
         INTO v_participations_owed 
         FROM ParticipationExpense 
@@ -520,10 +515,8 @@ BEGIN
         FROM Payment 
         WHERE PayerId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
 
-        -- 3. Calculate the final balance
         v_balance := (v_expenses_created + v_payments_received) - (v_participations_owed + v_payments_paid);
 
-        -- 4. Check the balance
         IF v_balance != 0 THEN
             RAISE_APPLICATION_ERROR(-20001, 'Member cannot leave group with a non-zero balance. Current balance is: ' || v_balance);
         END IF;
@@ -548,13 +541,11 @@ BEGIN
     WHERE  m.AppUserId  = :NEW.PayerId
     AND    m.AppGroupId = :NEW.AppGroupId;
 
-    
     SELECT m.AppGroupId, m.LeavingDate
     INTO   payee_g, payee_left
     FROM   Membership m
     WHERE  m.AppUserId  = :NEW.PayeeId
     AND    m.AppGroupId = :NEW.AppGroupId;
-
     
     IF payer_g != :NEW.AppGroupId THEN
         raise_application_error(
@@ -563,7 +554,6 @@ BEGIN
             ' does not belong to group ' || :NEW.AppGroupId
         );
     END IF;
-
     
     IF payee_g != :NEW.AppGroupId THEN
         raise_application_error(
@@ -572,7 +562,6 @@ BEGIN
             ' does not belong to group ' || :NEW.AppGroupId
         );
     END IF;
-
     
     IF payer_left IS NOT NULL THEN
         raise_application_error(
@@ -581,7 +570,6 @@ BEGIN
             ' is not active in group ' || :NEW.AppGroupId
         );
     END IF;
-
     
     IF payee_left IS NOT NULL THEN
         raise_application_error(
@@ -592,19 +580,21 @@ BEGIN
     END IF;
 END;
 /
+
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
-Create sequence MessagePrivateSeq
+CREATE sequence MessagePrivateSeq
 START WITH 800
 INCREMENT BY 1;
 --- trigger for setting MessagePrivateId and MessageTime
-Create OR REPLACE TRIGGER set_messageprivate_fields
-Before Insert ON MessagePrivate
+CREATE OR REPLACE TRIGGER set_messageprivate_fields
+BEFORE INSERT ON MessagePrivate
 FOR EACH ROW
-Begin
+BEGIN
 	:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
 	:NEW.MessageTime := SYSTIMESTAMP;
-End;
+END;
 /
+	
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
 CREATE OR REPLACE TRIGGER ExchangeRateExists
 BEFORE INSERT ON Payment
@@ -613,16 +603,13 @@ DECLARE
     v_base_currency_id  VARCHAR2(3);
     v_exchange_count    NUMBER;
 BEGIN
-    -- Step 1: Get the group's base currency
     SELECT BaseCurrencyId
     INTO v_base_currency_id
     FROM AppGroup
     WHERE AppGroupId = :NEW.AppGroupId;
 
-    -- Step 2: Only proceed with check if currency is not base. (otherwise we are fine)
     IF :NEW.CurrencyId <> v_base_currency_id THEN
         
-        -- Step 3: Check if a valid exchange rate exists on PaymentDate
         SELECT COUNT(*)
         INTO v_exchange_count
         FROM ExchangeRate ER
@@ -630,7 +617,6 @@ BEGIN
           AND ER.CurrencyTo = v_base_currency_id
           AND ER.ExchangeDate = :NEW.PaymentDate; 
 
-        -- Step 4: If NO exchange rate exists, raise error
         IF v_exchange_count = 0 THEN
             RAISE_APPLICATION_ERROR(-20002, 
                 'No exchange rate exists for the payment currency to the group base currency on the payment date.');
