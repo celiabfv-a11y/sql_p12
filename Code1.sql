@@ -479,19 +479,66 @@ SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notif
 -- TRIGGERS
 --- 1. When a member left the group, the balance must be 0.
 
+
 --- 2. In a payment, payer and payee must be active members of the same group.
-CREATE TRIGGER MembershipCheck
-	BEFORE INSERT ON Payment
-	FOR EACH ROW
-	BEGIN
-	IF NOT EXISTS (
-	SELECT 1
-	FROM Membership m1
-	JOIN Membership m2 ON m2.AppGroupId = m1.AppGroupId AND m1.AppUserId = :NEW.PayerId AND m2.AppUserId = :NEW.PayeeId
-	HAVING m1.AppGroupId = m2.AppGroupId
-	) THEN
-	raise_application_error(-20001, 'Payer and payee do not belong to the same group.')
-	END IF;
+CREATE TRIGGER MembershipCheck1
+BEFORE INSERT ON Payment
+FOR EACH ROW
+DECLARE
+    payer_g    NUMBER;   
+    payee_g    NUMBER;  
+    payer_left DATE;     
+    payee_left DATE;     
+BEGIN
+    
+    SELECT m.AppGroupId, m.LeavingDate
+    INTO   payer_g, payer_left
+    FROM   Membership m
+    WHERE  m.AppUserId  = :NEW.PayerId
+    AND    m.AppGroupId = :NEW.AppGroupId;
+
+    
+    SELECT m.AppGroupId, m.LeavingDate
+    INTO   payee_g, payee_left
+    FROM   Membership m
+    WHERE  m.AppUserId  = :NEW.PayeeId
+    AND    m.AppGroupId = :NEW.AppGroupId;
+
+    
+    IF payer_g != :NEW.AppGroupId THEN
+        raise_application_error(
+            -20010,
+            'Payer ' || :NEW.PayerId ||
+            ' does not belong to group ' || :NEW.AppGroupId
+        );
+    END IF;
+
+    
+    IF payee_g != :NEW.AppGroupId THEN
+        raise_application_error(
+            -20011,
+            'Payee ' || :NEW.PayeeId ||
+            ' does not belong to group ' || :NEW.AppGroupId
+        );
+    END IF;
+
+    
+    IF payer_left IS NOT NULL THEN
+        raise_application_error(
+            -20012,
+            'Payer ' || :NEW.PayerId ||
+            ' is not active in group ' || :NEW.AppGroupId
+        );
+    END IF;
+
+    
+    IF payee_left IS NOT NULL THEN
+        raise_application_error(
+            -20013,
+            'Payee ' || :NEW.PayeeId ||
+            ' is not active in group ' || :NEW.AppGroupId
+        );
+    END IF;
 END;
 
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
