@@ -478,6 +478,50 @@ SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notif
 
 -- TRIGGERS
 --- 1. When a member left the group, the balance must be 0.
+CREATE OR REPLACE TRIGGER check_balance_before_leaving
+BEFORE UPDATE OF LeavingDate ON Membership
+FOR EACH ROW
+DECLARE
+    v_balance NUMBER;
+    v_expenses_created NUMBER;
+    v_payments_received NUMBER;
+    v_participations_owed NUMBER;
+    v_payments_paid NUMBER;
+BEGIN
+    -- Only run this check if the user is being marked as having left
+    IF :NEW.LeavingDate IS NOT NULL AND :OLD.LeavingDate IS NULL THEN
+        
+        -- 1. Get all money the user is OWED
+        SELECT COALESCE(SUM(Amount), 0) 
+        INTO v_expenses_created 
+        FROM Expense 
+        WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+        
+        SELECT COALESCE(SUM(Amount), 0) 
+        INTO v_payments_received 
+        FROM Payment 
+        WHERE PayeeId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+
+        -- 2. Get all money the user OWES
+        SELECT COALESCE(SUM(Amount), 0) 
+        INTO v_participations_owed 
+        FROM ParticipationExpense 
+        WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+
+        SELECT COALESCE(SUM(Amount), 0) 
+        INTO v_payments_paid 
+        FROM Payment 
+        WHERE PayerId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+
+        -- 3. Calculate the final balance
+        v_balance := (v_expenses_created + v_payments_received) - (v_participations_owed + v_payments_paid);
+
+        -- 4. Check the balance
+        IF v_balance != 0 THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Member cannot leave group with a non-zero balance. Current balance is: ' || v_balance);
+        END IF;
+    END IF;
+END;
 
 
 --- 2. In a payment, payer and payee must be active members of the same group.
@@ -542,15 +586,47 @@ BEGIN
 END;
 
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
-
+Create sequence MessagePrivateSeq
+START WITH 800
+INCREMENT BY 1;
+--- trigger for setting MessagePrivateId and MessageTime
+Create OR REPLACE TRIGGER set_messageprivate_fields
+Before Insert ON MessagePrivate
+FOR EACH ROW
+Begin
+	:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
+	:NEW.MessageTime := SYSTIMESTAMP;
+End;
 
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
-CREATE TRIGGER ExchangeRateExists
-	BEFORE INSERT ON Payment
-	FOR EACH ROW
-	BEGIN
-	IF NOT (:NEW.Currency = (SELECT AG.BaseCurrencyId FROM AppGroup AG) OR (:NEW.PaymentDate = (SELECT ER.ExchangeDate FROM ExchangeRate ER)) AND 
-	(SELECT ER.CurrencyFrom FROM ExchangeRate ER JOIN AppGroup AG ON AG.BaseCurrencyId = ER.CurrencyTo WHERE ER.CurrencyFrom = :NEW.Currency)) THEN
-	raise_application_error(-20001, 'There is no exchange rate for that currency.');
-	END IF;
+CREATE OR REPLACE TRIGGER ExchangeRateExists
+BEFORE INSERT ON Payment
+FOR EACH ROW
+DECLARE
+    v_base_currency_id  VARCHAR2(3);
+    v_exchange_count    NUMBER;
+BEGIN
+    -- Step 1: Get the group's base currency
+    SELECT BaseCurrencyId
+    INTO v_base_currency_id
+    FROM AppGroup
+    WHERE AppGroupId = :NEW.AppGroupId;
+
+    -- Step 2: Only proceed with check if currency is not base. (otherwise we are fine)
+    IF :NEW.CurrencyId <> v_base_currency_id THEN
+        
+        -- Step 3: Check if a valid exchange rate exists on PaymentDate
+        SELECT COUNT(*)
+        INTO v_exchange_count
+        FROM ExchangeRate ER
+        WHERE ER.CurrencyFrom = :NEW.CurrencyId
+          AND ER.CurrencyTo = v_base_currency_id
+          AND ER.ExchangeDate = :NEW.PaymentDate; 
+
+        -- Step 4: If NO exchange rate exists, raise error
+        IF v_exchange_count = 0 THEN
+            RAISE_APPLICATION_ERROR(-20002, 
+                'No exchange rate exists for the payment currency to the group base currency on the payment date.');
+        END IF;
+    END IF;
 END;
