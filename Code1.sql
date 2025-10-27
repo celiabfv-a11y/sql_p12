@@ -392,72 +392,59 @@ INSERT INTO MessagePrivate (MessagePrivateId, AppGroupId, SenderId, RecipientId,
 -- QUERIES
 --- 1. Average amount spent by each user in each group. 
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, AVG(Payment.amount)
-FROM Payment
-JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
-JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
-GROUP BY AppUser.AppUserId, AppGroup.AppGroupId,AppUser.FirstName,AppUser.LastName,AppGroup.GroupName
-ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
+	FROM Payment
+	JOIN AppUser ON AppUser.AppUserId = Payment.PayerId
+	JOIN AppGroup ON Payment.AppGroupId = AppGroup.AppGroupId
+	GROUP BY AppUser.AppUserId, AppGroup.AppGroupId,AppUser.FirstName,AppUser.LastName,AppGroup.GroupName
+	ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
 
 --- 2. Average amount of the expenses for the months of June, July, and August of the year 2025 for each group and category.
-Select AG.GroupName, C.CategoryName, AVG(E.Amount * ER.Rate) AS AverageExpenseInBaseCurrency
-FROM Expense E
-JOIN AppGroup AG ON E.AppGroupId = AG.AppGroupId
-JOIN Category1 C ON E.CategoryId = C.CategoryId
-JOIN ExchangeRate ER ON E.CurrencyId = ER.CurrencyFrom 
-					 AND AG.BaseCurrencyId = ER.CurrencyTo
-					 AND ER.ExchangeDate = E.ExpenseDate 
-WHERE EXTRACT(MONTH FROM E.ExpenseDate) IN (6, 7, 8)
-  AND EXTRACT(YEAR FROM E.ExpenseDate) = 2025
-GROUP BY AG.GroupName, C.CategoryName;
+SELECT AppGroup.GroupName, Category1.CategoryName, AVG(Expense.Amount * ExchangeRate.Rate) AS AverageExpenseInBaseCurrency
+	FROM Expense
+	JOIN AppGroup ON Expense.AppGroupId = AppGroup.AppGroupId
+	JOIN Category1 ON Expense.CategoryId = Category1.CategoryId
+	JOIN ExchangeRate ON Expense.CurrencyId = ExchangeRate.CurrencyFrom 
+						AND AppGroup.BaseCurrencyId = ExchangeRate.CurrencyTo
+						AND ExchangeRate.ExchangeDate = Expense.ExpenseDate 
+	WHERE EXTRACT(MONTH FROM Expense.ExpenseDate) IN (6, 7, 8)
+						AND EXTRACT(YEAR FROM Expense.ExpenseDate) = 2025
+	GROUP BY AppGroup.GroupName, Category1.CategoryName;
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
-SELECT * FROM (
-    SELECT 
-        u.FirstName,
-        u.LastName,
-        (SELECT COUNT(*) 
-         FROM MessageGroup mg
-         WHERE mg.SenderId = u.AppUserId) AS TotalGroupMessages,
-        (SELECT COUNT(*) 
-         FROM MessagePrivate mp
-         WHERE mp.SenderId = u.AppUserId) AS TotalPrivateMessages,
-        (
-            (SELECT COUNT(*) 
-             FROM MessageGroup mg
-             WHERE mg.SenderId = u.AppUserId)
-          + (SELECT COUNT(*) 
-             FROM MessagePrivate mp
-             WHERE mp.SenderId = u.AppUserId)
-        ) AS OverallTotalMessages
-    FROM AppUser u
-) Results
-WHERE Results.OverallTotalMessages > 0
-ORDER BY Results.OverallTotalMessages DESC;
+SELECT * FROM (SELECT AppUser.FirstName, AppUser.LastName,
+	(SELECT COUNT(*) FROM MessageGroup
+		WHERE MessageGroup.SenderId = Appuser.AppUserId) AS TotalGroupMessages,
+	(SELECT COUNT(*) FROM MessagePrivate
+		WHERE MessagePrivate.SenderId = AppUser.AppUserId) AS TotalPrivateMessages,
+	((SELECT COUNT(*) FROM MessageGroup
+		WHERE MessageGroup.SenderId = AppUser.AppUserId) + 
+	(SELECT COUNT(*) FROM MessagePrivate
+		WHERE MessagePrivate.SenderId = AppUser.AppUserId)
+	) AS OverallTotalMessages
+    FROM AppUser
+	) Results
+	WHERE Results.OverallTotalMessages > 0
+	ORDER BY Results.OverallTotalMessages DESC;
 
 --- 4. Details of all payment settlements whose amount is greater than the average payment amount within the same group. 
-SELECT 
-    g.GroupName,
-    p.PaymentDate,
-    p.Amount,
-    payer.FirstName  AS PayerFirstName,
-    payer.LastName   AS PayerLastName,
-    payee.FirstName  AS PayeeFirstName,
-    payee.LastName   AS PayeeLastName
-FROM Payment p
-JOIN AppGroup g 
-    ON p.AppGroupId = g.AppGroupId
-JOIN AppUser payer
-    ON payer.AppUserId = p.PayerId
-JOIN AppUser payee
-    ON payee.AppUserId = p.PayeeId
-WHERE p.Amount > (
-        SELECT AVG(pay.Amount)
-        FROM Payment pay
-        WHERE pay.AppGroupId = p.AppGroupId
+SELECT AppGroup.GroupName, Payment.PaymentDate, Payment.Amount,
+    Payer.FirstName  AS PayerFirstName,
+    Payer.LastName   AS PayerLastName,
+    Payee.FirstName  AS PayeeFirstName,
+    Payee.LastName   AS PayeeLastName
+	FROM Payment
+	JOIN AppGroup 
+		ON Payment.AppGroupId = AppGroup.AppGroupId
+	JOIN AppUser Payer
+    	ON Payer.AppUserId = Payment.PayerId
+	JOIN AppUser Payee
+    	ON Payee.AppUserId = Payment.PayeeId
+	WHERE Payment.Amount > (
+        SELECT AVG(Pay.Amount)
+        	FROM Payment Pay
+        	WHERE Pay.AppGroupId = Payment.AppGroupId
     )
-ORDER BY 
-    g.GroupName ASC,
-    p.Amount DESC;
+	ORDER BY AppGroup.GroupName ASC, Payment.Amount DESC;
 
 --- 5. Minimum expense and maximum expense made by each user in groups belonging to the 'Invoices' category.
 SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, MIN(Expense.amount), MAX(Expense.amount)
@@ -470,7 +457,7 @@ SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, MIN(Expense.amou
 	ORDER BY AppUser.FirstName, AppUser.LastName, AppGroup.GroupName;
 
 --- 6. Full name, group name, and total number of unread notifications of each user who is an active member of a group.
-SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notifications_unread
+SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*) AS Notifications_unread
 	FROM MEMBERSHIP
 	JOIN AppUser ON AppUser.AppUserId = Membership.AppUserId
 	JOIN AppGroup ON AppGroup.AppGroupId = Membership.AppGroupId
@@ -483,115 +470,109 @@ SELECT AppUser.FirstName, AppUser.LastName, AppGroup.GroupName, COUNT(*)AS Notif
 
 -- TRIGGERS
 --- 1. When a member left the group, the balance must be 0.
-CREATE OR REPLACE TRIGGER check_balance_before_leaving
-BEFORE UPDATE OF LeavingDate ON Membership
-FOR EACH ROW
-DECLARE
-    v_balance NUMBER;
-    v_expenses_created NUMBER;
-    v_payments_received NUMBER;
-    v_participations_owed NUMBER;
-    v_payments_paid NUMBER;
-BEGIN
-    IF :NEW.LeavingDate IS NOT NULL AND :OLD.LeavingDate IS NULL THEN
+CREATE OR REPLACE TRIGGER CheckBalance
+	BEFORE UPDATE OF LeavingDate ON Membership
+	FOR EACH ROW
+	DECLARE
+		v_balance NUMBER;
+    	v_expensesCreated NUMBER;
+    	v_paymentsReceived NUMBER;
+    	v_participationsOwed NUMBER;
+    	v_paymentsPaid NUMBER;
+	BEGIN
+    	IF :NEW.LeavingDate IS NOT NULL AND :OLD.LeavingDate IS NULL THEN
         
-        SELECT COALESCE(SUM(Amount), 0) 
-        INTO v_expenses_created 
-        FROM Expense 
-        WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+        	SELECT COALESCE(SUM(Amount), 0) 
+        		INTO v_expensesCreated 
+        		FROM Expense 
+        		WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
         
-        SELECT COALESCE(SUM(Amount), 0) 
-        INTO v_payments_received 
-        FROM Payment 
-        WHERE PayeeId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+        	SELECT COALESCE(SUM(Amount), 0) 
+        		INTO v_paymentsReceived 
+        		FROM Payment 
+        		WHERE PayeeId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
 
-        SELECT COALESCE(SUM(Amount), 0) 
-        INTO v_participations_owed 
-        FROM ParticipationExpense 
-        WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+        	SELECT COALESCE(SUM(Amount), 0) 
+        		INTO v_participationsOwed 
+        		FROM ParticipationExpense 
+        		WHERE AppUserId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
 
-        SELECT COALESCE(SUM(Amount), 0) 
-        INTO v_payments_paid 
-        FROM Payment 
-        WHERE PayerId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
+        	SELECT COALESCE(SUM(Amount), 0) 
+        		INTO v_paymentsPaid 
+        		FROM Payment 
+        		WHERE PayerId = :OLD.AppUserId AND AppGroupId = :OLD.AppGroupId;
 
-        v_balance := (v_expenses_created + v_payments_received) - (v_participations_owed + v_payments_paid);
+        	v_balance := (v_expensesCreated + v_paymentsReceived) - (v_participationsOwed + v_paymentsPaid);
 
-        IF v_balance != 0 THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Member cannot leave group with a non-zero balance. Current balance is: ' || v_balance);
-        END IF;
-    END IF;
+        	IF v_balance != 0 THEN
+            	RAISE_APPLICATION_ERROR(-20001, 'Member cannot leave group with a non-zero balance. Current balance is: ' || v_balance);
+        	END IF;
+    	END IF;
 END;
 /
 
 --- 2. In a payment, payer and payee must be active members of the same group.
-CREATE TRIGGER MembershipCheck1
-BEFORE INSERT ON Payment
-FOR EACH ROW
-DECLARE
-    payer_g    NUMBER;   
-    payee_g    NUMBER;  
-    payer_left DATE;     
-    payee_left DATE;     
-BEGIN
-    
-    SELECT m.AppGroupId, m.LeavingDate
-    INTO   payer_g, payer_left
-    FROM   Membership m
-    WHERE  m.AppUserId  = :NEW.PayerId
-    AND    m.AppGroupId = :NEW.AppGroupId;
+CREATE OR REPLACE TRIGGER CheckMembership
+	BEFORE INSERT ON Payment
+	FOR EACH ROW
+	DECLARE
+    	PayerGroupId NUMBER;   
+    	PayeeGroupid NUMBER;  
+    	PayerLeftDate DATE;     
+    	PayeeLeftDate DATE;     
+	BEGIN
+    	SELECT Membership.AppGroupId, Membership.LeavingDate
+    		INTO   PayerGroupId, PayerLeftDate
+    		FROM   Membership
+    		WHERE  Membership.AppUserId  = :NEW.PayerId
+    		AND    Membership.AppGroupId = :NEW.AppGroupId;
 
-    SELECT m.AppGroupId, m.LeavingDate
-    INTO   payee_g, payee_left
-    FROM   Membership m
-    WHERE  m.AppUserId  = :NEW.PayeeId
-    AND    m.AppGroupId = :NEW.AppGroupId;
+    	SELECT Membership.AppGroupId, Membership.LeavingDate
+    		INTO   PayeeGroupId, PayeeLeftDate
+    		FROM   Membership
+    		WHERE  Membership.AppUserId  = :NEW.PayeeId
+    		AND    Membership.AppGroupId = :NEW.AppGroupId;
     
-    IF payer_g != :NEW.AppGroupId THEN
-        raise_application_error(
-            -20010,
-            'Payer ' || :NEW.PayerId ||
-            ' does not belong to group ' || :NEW.AppGroupId
-        );
-    END IF;
+    	IF PayerGroupId != :NEW.AppGroupId THEN
+        	raise_application_error(-20010,
+            	'Payer ' || :NEW.PayerId ||
+            	' does not belong to group ' || :NEW.AppGroupId
+        	);
+    	END IF;
     
-    IF payee_g != :NEW.AppGroupId THEN
-        raise_application_error(
-            -20011,
-            'Payee ' || :NEW.PayeeId ||
-            ' does not belong to group ' || :NEW.AppGroupId
-        );
-    END IF;
+    	IF PayeeGroupId != :NEW.AppGroupId THEN
+        	raise_application_error(-20011,
+            	'Payee ' || :NEW.PayeeId ||
+            	' does not belong to group ' || :NEW.AppGroupId
+        	);
+    	END IF;
     
-    IF payer_left IS NOT NULL THEN
-        raise_application_error(
-            -20012,
-            'Payer ' || :NEW.PayerId ||
-            ' is not active in group ' || :NEW.AppGroupId
-        );
-    END IF;
+    	IF PayerLeftDate IS NOT NULL THEN
+        	raise_application_error(-20012,
+            	'Payer ' || :NEW.PayerId ||
+            	' is not active in group ' || :NEW.AppGroupId
+    		);
+    	END IF;
     
-    IF payee_left IS NOT NULL THEN
-        raise_application_error(
-            -20013,
-            'Payee ' || :NEW.PayeeId ||
-            ' is not active in group ' || :NEW.AppGroupId
-        );
-    END IF;
+    	IF PayeeLeftDate IS NOT NULL THEN
+        	raise_application_error(-20013,
+            	'Payee ' || :NEW.PayeeId ||
+            	' is not active in group ' || :NEW.AppGroupId
+        	);
+    	END IF;
 END;
 /
 
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
-CREATE sequence MessagePrivateSeq
-START WITH 800
-INCREMENT BY 1;
---- trigger for setting MessagePrivateId and MessageTime
-CREATE OR REPLACE TRIGGER set_messageprivate_fields
-BEFORE INSERT ON MessagePrivate
-FOR EACH ROW
-BEGIN
-	:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
-	:NEW.MessageTime := SYSTIMESTAMP;
+CREATE OR REPLACE sequence CheckMessagePrivate
+	START WITH 800
+	INCREMENT BY 1;
+	CREATE OR REPLACE TRIGGER SetMessagePrivateFields
+		BEFORE INSERT ON MessagePrivate
+		FOR EACH ROW
+		BEGIN
+			:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
+			:NEW.MessageTime := SYSTIMESTAMP;
 END;
 /
 	
