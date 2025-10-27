@@ -534,28 +534,28 @@ CREATE OR REPLACE TRIGGER CheckMembership
     		AND    Membership.AppGroupId = :NEW.AppGroupId;
     
     	IF PayerGroupId != :NEW.AppGroupId THEN
-        	raise_application_error(-20010,
+        	RAISE_APPLICATION_ERROR(-20010,
             	'Payer ' || :NEW.PayerId ||
             	' does not belong to group ' || :NEW.AppGroupId
         	);
     	END IF;
     
     	IF PayeeGroupId != :NEW.AppGroupId THEN
-        	raise_application_error(-20011,
+        	RAISE_APPLICATION_ERROR(-20011,
             	'Payee ' || :NEW.PayeeId ||
             	' does not belong to group ' || :NEW.AppGroupId
         	);
     	END IF;
     
     	IF PayerLeftDate IS NOT NULL THEN
-        	raise_application_error(-20012,
+        	RAISE_APPLICATION_ERROR(-20012,
             	'Payer ' || :NEW.PayerId ||
             	' is not active in group ' || :NEW.AppGroupId
     		);
     	END IF;
     
     	IF PayeeLeftDate IS NOT NULL THEN
-        	raise_application_error(-20013,
+        	RAISE_APPLICATION_ERROR(-20013,
             	'Payee ' || :NEW.PayeeId ||
             	' is not active in group ' || :NEW.AppGroupId
         	);
@@ -564,44 +564,44 @@ END;
 /
 
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
-CREATE OR REPLACE sequence CheckMessagePrivate
+CREATE SEQUENCE CheckMessagePrivate
 	START WITH 800
 	INCREMENT BY 1;
 	CREATE OR REPLACE TRIGGER SetMessagePrivateFields
 		BEFORE INSERT ON MessagePrivate
 		FOR EACH ROW
 		BEGIN
-			:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
+			:NEW.MessagePrivateId := CheckMessagePrivate.NEXTVAL;
 			:NEW.MessageTime := SYSTIMESTAMP;
 END;
 /
 	
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
 CREATE OR REPLACE TRIGGER ExchangeRateExists
-BEFORE INSERT ON Payment
-FOR EACH ROW
-DECLARE
-    v_base_currency_id  VARCHAR2(3);
-    v_exchange_count    NUMBER;
-BEGIN
-    SELECT BaseCurrencyId
-    INTO v_base_currency_id
-    FROM AppGroup
-    WHERE AppGroupId = :NEW.AppGroupId;
+	BEFORE INSERT ON Payment
+	FOR EACH ROW
+	DECLARE
+    	v_baseCurrencyId VARCHAR2(3);
+    	v_exchangeCount NUMBER;
+	BEGIN
+    	SELECT BaseCurrencyId
+    		INTO v_baseCurrencyId
+    		FROM AppGroup
+    		WHERE AppGroupId = :NEW.AppGroupId;
 
-    IF :NEW.CurrencyId <> v_base_currency_id THEN
+    	IF :NEW.CurrencyId <> v_baseCurrencyId THEN
         
-        SELECT COUNT(*)
-        INTO v_exchange_count
-        FROM ExchangeRate ER
-        WHERE ER.CurrencyFrom = :NEW.CurrencyId
-          AND ER.CurrencyTo = v_base_currency_id
-          AND ER.ExchangeDate = :NEW.PaymentDate; 
+        	SELECT COUNT(*)
+        		INTO v_exchangeCount
+        		FROM ExchangeRate
+        		WHERE ExchangeRate.CurrencyFrom = :NEW.CurrencyId
+          				AND ExchangeRate.CurrencyTo = v_baseCurrencyId
+          				AND ExchangeRate.ExchangeDate = :NEW.PaymentDate; 
 
-        IF v_exchange_count = 0 THEN
-            RAISE_APPLICATION_ERROR(-20002, 
-                'No exchange rate exists for the payment currency to the group base currency on the payment date.');
-        END IF;
-    END IF;
+        	IF v_exchangeCount = 0 THEN
+            	RAISE_APPLICATION_ERROR(-20002, 
+                	'No exchange rate exists for the payment currency to the group base currency on the payment date.');
+        	END IF;
+    	END IF;
 END;
 /
