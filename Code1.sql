@@ -399,10 +399,17 @@ GROUP BY AppUser.AppUserId, AppGroup.AppGroupId,AppUser.FirstName,AppUser.LastNa
 ORDER BY AppUser.FirstName ASC, AppUser.LastName ASC, AppGroup.GroupName ASC;
 
 --- 2. Average amount of the expenses for the months of June, July, and August of the year 2025 for each group and category.
-SELECT AVG(Expense.Amount) AS AVERAGE_AMOUNT, Expense.AppGroupId, Expense.CategoryId
-	FROM Expense 
-	WHERE Expense.ExpenseDate >= TO_DATE('2025-06-01','YYYY-MM-DD') AND Expense.ExpenseDate <= TO_DATE('2025-08-30','YYYY-MM-DD')
-	GROUP BY Expense.AppGroupId, Expense.CategoryId;
+Select AG.GroupName, C.CategoryName, 
+	   AVG(E.Amount * ER.Rate) AS AverageExpenseInBaseCurrency
+From Expense E
+Join AppGroup AG ON E.AppGroupId = AG.AppGroupId
+Join Category1 C ON E.CategoryId = C.CategoryId
+Join ExchangeRate ER ON E.CurrencyId = ER.CurrencyFrom 
+					 AND AG.BaseCurrencyId = ER.CurrencyTo
+					 AND ER.ExchangeDate = E.ExpenseDate 
+Where EXTRACT(MONTH FROM E.ExpenseDate) IN (6, 7, 8)
+  AND EXTRACT(YEAR FROM E.ExpenseDate) = 2025
+group by AG.GroupName, C.CategoryName;
 
 --- 3. Total number of group messages, the total number of private messages, and total of all messages sent by each user.
 SELECT *
