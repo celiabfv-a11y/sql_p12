@@ -522,7 +522,7 @@ BEGIN
         END IF;
     END IF;
 END;
-
+/
 
 --- 2. In a payment, payer and payee must be active members of the same group.
 CREATE TRIGGER MembershipCheck1
@@ -584,7 +584,7 @@ BEGIN
         );
     END IF;
 END;
-
+/
 --- 3. When sending a private message set automatically the message Id (as asequence) and the message date (current date).
 Create sequence MessagePrivateSeq
 START WITH 800
@@ -597,7 +597,7 @@ Begin
 	:NEW.MessagePrivateId := MessagePrivateSeq.NEXTVAL;
 	:NEW.MessageTime := SYSTIMESTAMP;
 End;
-
+/
 --- 4. When the currency of the payment is different than the default currency of the group, it must exist a ExchangeRate from the currency of the payment to the default currency of the group for the payment date.
 CREATE OR REPLACE TRIGGER ExchangeRateExists
 BEFORE INSERT ON Payment
@@ -630,3 +630,4 @@ BEGIN
         END IF;
     END IF;
 END;
+/
